@@ -9,6 +9,7 @@ namespace xutl\sms\captcha;
 
 use Yii;
 use yii\base\Action;
+use yii\di\Instance;
 use yii\helpers\Url;
 use yii\web\Response;
 
@@ -68,6 +69,20 @@ class CaptchaAction extends Action
     public $fixedVerifyCode;
 
     /**
+     * @var string
+     */
+    public $sms = 'sms';
+
+    /**
+     * 初始化
+     */
+    public function init()
+    {
+        parent::init();
+        $this->sms = Instance::ensure($this->sms, Sms::class);
+    }
+
+    /**
      * Runs the action.
      */
     public function run()
@@ -89,7 +104,7 @@ class CaptchaAction extends Action
             } else {
                 $code = $this->getVerifyCode(true);
                 $session['newMobile'] = $mobile;
-                Yii::$app->sms->sendTemplate($mobile, [$code, 1], 96930);
+                $this->sms->sendVerifyCode($mobile, $code);
                 return [
                     //'code' => $code,
                     'hash' => $this->generateValidationHash($code),
