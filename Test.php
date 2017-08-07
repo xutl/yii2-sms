@@ -9,5 +9,13 @@ namespace xutl\sms;
 
 class Test extends BaseSms
 {
+    /**
+     * @var string the default class name of the new message instances created by [[createMessage()]]
+     */
+    public $messageClass = 'xutl\sms\TestMessage';
 
+    protected function sendMessage($message)
+    {
+
+    }
 }
