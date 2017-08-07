@@ -71,6 +71,7 @@ abstract class BaseSms extends Component implements SmsInterface
      * ```
      */
     public $messageConfig = [];
+
     /**
      * @var string the default class name of the new message instances created by [[createMessage()]]
      */
@@ -112,8 +113,6 @@ abstract class BaseSms extends Component implements SmsInterface
         }
 
         $this->_message = $message;
-
-
 
         $text = $this->render($view, $params);
 
