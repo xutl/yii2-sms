@@ -6,7 +6,7 @@
  */
  namespace xutl\sms;
 
- interface SmserInterface
+ interface SmsInterface
  {
 
      /**
@@ -27,8 +27,8 @@
      public function compose($view = null, array $params = []);
 
      /**
-      * Sends the given email message.
-      * @param MessageInterface $message email message instance to be sent
+      * Sends the given sms message.
+      * @param MessageInterface $message sms message instance to be sent
       * @return bool whether the message has been sent successfully
       */
      public function send($message);
@@ -38,7 +38,7 @@
       *
       * This method may be implemented by some mailers which support more efficient way of sending multiple messages in the same batch.
       *
-      * @param array $messages list of email messages, which should be sent.
+      * @param array $messages list of sms messages, which should be sent.
       * @return int number of messages that are successfully sent.
       */
      public function sendMultiple(array $messages);
