@@ -138,14 +138,18 @@ class Yuntongxun extends BaseClient
         return $this->api("Accounts/$this->accountSid/QuerySubAccountByName", 'POST', $params);
     }
 
+    protected function sendSms($phoneNumbers, $content, $signName = null, $outId = null){
+        return [];
+    }
+
     /**
      * 发送模板短信
      * @param array $to 短信接收手机号码集合,用英文逗号分开
-     * @param array $datas 内容数据
+     * @param array $templateParams 内容数据
      * @param string $tempId 模板Id
      * @return array
      */
-    public function sendTemplateSMS($phoneNumbers, $templateCode, array $templateParam = [], $signName = null, $outId = null)
+    public function sendTemplateSMS($phoneNumbers, $templateCode, array $templateParams = [], $signName = null, $outId = null)
     {
         $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $templateCode, 'datas' => $templateParam];
         return $this->api("Accounts/$this->accountSid/SMS/TemplateSMS", 'POST', $params);

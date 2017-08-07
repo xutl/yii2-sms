@@ -136,17 +136,17 @@ abstract class BaseClient extends Component implements ClientInterface
      * 发送模板短信
      * @param array|string $phoneNumbers 短信接收号码。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码
      * @param string $signName 短信签名
-     * @param string $templateCode 短信模板ID
-     * @param array $templateParam 短信模板变量替换JSON串。
+     * @param string $templateID 短信模板ID
+     * @param array $templateParams 短信模板变量替换JSON串。
      * @param string $outId 外部流水扩展字段
      * @return array
      */
-    public function sendTemplate($phoneNumbers, $templateCode, array $templateParam = [], $signName = null, $outId = null)
+    public function sendTemplate($phoneNumbers, $templateID, array $templateParams = [], $signName = null, $outId = null)
     {
         if (is_array($phoneNumbers)) {
             $phoneNumbers = implode(',', $phoneNumbers);
         }
-        return $this->sendTemplateSms($phoneNumbers, $templateCode, $templateParam, $signName, $outId);
+        return $this->sendTemplateSms($phoneNumbers, $templateID, $templateParams, $signName, $outId);
     }
 
     /**
