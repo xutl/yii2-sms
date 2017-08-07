@@ -1,0 +1,28 @@
+{
+  "name": "xutl/yii2-sms",
+  "description": "The sms extension for the Yii framework",
+  "keywords": [
+    "yii2",
+    "message"
+  ],
+  "type": "yii2-extension",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "X TL",
+      "email": "xutl@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "~2.0.6"
+  },
+  "require-dev": {
+    "aws/aws-sdk-php": "~3.0",
+    "predis/predis": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "xutl\\sms\\": ""
+    }
+  }
+}
