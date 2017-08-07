@@ -22,14 +22,15 @@ use yii\base\InvalidParamException;
  *         'class' => 'xutl\sms\Collection',
  *         'clients' => [
  *             'aliyun' => [
- *                 'class' => 'xutl\aliyun\Sms',
- *                 'clientId' => 'google_client_id',
- *                 'clientSecret' => 'google_client_secret',
+ *                 'class' => 'xutl\aliyun\clients\Aliyun',
+ *                 'accessId' => 'access_id',
+ *                 'accessKey' => 'access_secret',
  *              ],
- *             'facebook' => [
- *                 'class' => 'yii\authclient\clients\Facebook',
- *                 'clientId' => 'facebook_client_id',
- *                 'clientSecret' => 'facebook_client_secret',
+ *             'yuntongxun' => [
+ *                 'class' => 'xutl\aliyun\clients\Yuntongxun',
+ *                 'accountSid' => 'account_sid',
+ *                 'accountToken' => 'account_token',
+ *                 'appId' => 'app_id',
  *             ],
  *         ],
  *     ]

@@ -15,7 +15,19 @@ use yii\base\InvalidConfigException;
 use xutl\sms\BaseClient;
 
 /**
- * Class Aliyun
+ * 阿里云短消息接口
+ *
+ * 'components' => [
+ *     'sms' => [
+ *         'aliyun' => [
+ *             'class' => 'xutl\aliyun\clients\Aliyun',
+ *             'accessId' => 'access_id',
+ *             'accessKey' => 'access_key',
+ *          ],
+ *     ]
+ *     ...
+ * ]
+ * ```
  * @package xutl\sms\clients
  */
 class Aliyun extends BaseClient

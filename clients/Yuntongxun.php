@@ -11,6 +11,22 @@ use xutl\sms\BaseClient;
 use Yii;
 use yii\base\InvalidConfigException;
 
+/**
+ * Class Yuntongxun
+ * 'components' => [
+ *     'sms' => [
+ *         'aliyun' => [
+ *             'class' => 'xutl\aliyun\clients\Yuntongxun',
+ *             'accountSid' => 'account_sid',
+ *             'accountToken' => 'account_token',
+ *             'appId' => 'app_id',
+ *          ],
+ *     ]
+ *     ...
+ * ]
+ * ```
+ * @package yuncms\sms\clients
+ */
 class Yuntongxun extends BaseClient
 {
     /**
@@ -18,10 +34,19 @@ class Yuntongxun extends BaseClient
      */
     public $baseUrl = 'https://app.cloopen.com:8883/';
 
+    /**
+     * @var string 账户SID
+     */
     public $accountSid;
 
+    /**
+     * @var string 账户令牌
+     */
     public $accountToken;
 
+    /**
+     * @var string 应用ID
+     */
     public $appId;
 
     public $subAccountSid;
@@ -138,7 +163,8 @@ class Yuntongxun extends BaseClient
         return $this->api("Accounts/$this->accountSid/QuerySubAccountByName", 'POST', $params);
     }
 
-    protected function sendSms($phoneNumbers, $content, $signName = null, $outId = null){
+    protected function sendSms($phoneNumbers, $content, $signName = null, $outId = null)
+    {
         return [];
     }
 
