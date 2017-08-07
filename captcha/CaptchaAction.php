@@ -79,7 +79,7 @@ class CaptchaAction extends Action
     public function init()
     {
         parent::init();
-        $this->sms = Instance::ensure($this->sms, Sms::class);
+        //$this->sms = Instance::ensure($this->sms, Sms::class);
     }
 
     /**
@@ -104,7 +104,7 @@ class CaptchaAction extends Action
             } else {
                 $code = $this->getVerifyCode(true);
                 $session['newMobile'] = $mobile;
-                $this->sms->sendVerifyCode($mobile, $code);
+                //$this->sms->sendVerifyCode($mobile, $code);
                 return [
                     //'code' => $code,
                     'hash' => $this->generateValidationHash($code),
