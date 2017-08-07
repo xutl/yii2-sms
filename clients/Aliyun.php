@@ -12,7 +12,7 @@ use yii\helpers\Json;
 use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\InvalidConfigException;
-use xutl\sms\BaseClient;
+use xutl\sms\BaseSms;
 
 /**
  * 阿里云短消息接口
@@ -30,7 +30,7 @@ use xutl\sms\BaseClient;
  * ```
  * @package xutl\sms\clients
  */
-class Aliyun extends BaseClient
+class Aliyun extends BaseSms
 {
     /**
      * @var string 阿里云AccessKey ID
