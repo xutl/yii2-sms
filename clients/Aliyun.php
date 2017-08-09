@@ -43,6 +43,11 @@ class Aliyun extends Sms
     public $accessKey;
 
     /**
+     * @var string 短信签名
+     */
+    public $signName;
+
+    /**
      * @var string 网关地址
      */
     public $baseUrl = 'https://dysmsapi.aliyuncs.com/';
@@ -80,8 +85,8 @@ class Aliyun extends Sms
         if (empty ($this->accessKey)) {
             throw new InvalidConfigException ('The "accessKey" property must be set.');
         }
-        if (empty ($this->version)) {
-            throw new InvalidConfigException ('The "version" property must be set.');
+        if (empty ($this->signName)) {
+            throw new InvalidConfigException ('The "signName" property must be set.');
         }
     }
 

@@ -25,10 +25,6 @@ abstract class Sms extends Component
      */
     public $baseUrl;
 
-    /**
-     * @var string 短信签名
-     */
-    public $signName;
 
     /**
      * @var Client internal HTTP client.
@@ -50,9 +46,6 @@ abstract class Sms extends Component
         parent::init();
         if (empty ($this->baseUrl)) {
             throw new InvalidConfigException ('The "baseUrl" property must be set.');
-        }
-        if (empty ($this->signName)) {
-            throw new InvalidConfigException ('The "signName" property must be set.');
         }
     }
 
