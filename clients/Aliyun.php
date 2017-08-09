@@ -68,15 +68,12 @@ class Aliyun extends Sms
     protected $dateTimeFormat = 'Y-m-d\TH:i:s\Z';
 
     /**
-     * 初始化
+     * 初始化短信
      * @throws InvalidConfigException
      */
     public function init()
     {
         parent::init();
-        if (empty ($this->baseUrl)) {
-            throw new InvalidConfigException ('The "baseUrl" property must be set.');
-        }
         if (empty ($this->accessId)) {
             throw new InvalidConfigException ('The "accessId" property must be set.');
         }
@@ -92,8 +89,9 @@ class Aliyun extends Sms
      * 发送短信
      * @param array|string $phoneNumbers
      * @param string $content
-     * @param string $signName
-     * @param string $outId
+     * @param null $signName
+     * @param null $outId
+     * @return mixed|void
      * @throws NotSupportedException
      */
     protected function sendMessage($phoneNumbers, $content, $signName = null, $outId = null)
@@ -123,10 +121,31 @@ class Aliyun extends Sms
     }
 
     /**
-     *
+     * 短信查询API
+     * @param string $phoneNumber
+     * @param int $sendDate
+     * @param int $pageSize
+     * @param int $currentPage
+     * @param null $bizId
+     * @return array
+     */
+    public function querySendDetails($phoneNumber, $sendDate, $pageSize = 10, $currentPage = 1, $bizId = null)
+    {
+        return $this->api('', 'GET', [
+            'Action' => 'QuerySendDetails',
+            'PhoneNumber' => $phoneNumber,
+            'BizId' => $bizId,
+            'SendDate' => $sendDate,
+            'PageSize' => $pageSize,
+            'CurrentPage' => $currentPage
+        ]);
+    }
+
+    /**
+     * 发送请求
      * @param string $url
      * @param string $method
-     * @param array $params
+     * @param array|string $params
      * @param array $headers
      * @return array
      * @throws Exception
@@ -150,17 +169,7 @@ class Aliyun extends Sms
         $params['Signature'] = base64_encode(hash_hmac('sha1', $source, $this->accessKey . '&', true));
 
         /** @var \yii\httpclient\Response $response */
-        $response = $this->createRequest()
-            ->setUrl($url)
-            ->setMethod($method)
-            ->setHeaders($headers)
-            ->setData($params)
-            ->send();
-
-        if (!$response->isOk) {
-            throw new Exception($response->content, $response->statusCode);
-        }
-        return $response->data;
+        return $this->sendRequest($method, $url, $params, $headers);
     }
 
     /**

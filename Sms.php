@@ -8,12 +8,11 @@
 namespace xutl\sms;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\di\Instance;
 use yii\base\Component;
-use yii\helpers\Inflector;
 use yii\httpclient\Client;
-use yii\helpers\StringHelper;
-use yii\base\InvalidConfigException;
+use yii\httpclient\Exception;
 
 /**
  * Class BaseClient
@@ -22,9 +21,127 @@ use yii\base\InvalidConfigException;
 abstract class Sms extends Component
 {
     /**
+     * @var string 网关地址
+     */
+    public $baseUrl;
+
+    /**
      * @var string 短信签名
      */
     public $signName;
+
+    /**
+     * @var Client internal HTTP client.
+     */
+    private $_httpClient;
+
+    /**
+     * @var array cURL request options. Option values from this field will overwrite corresponding
+     * values from [[defaultRequestOptions()]].
+     */
+    private $_requestOptions = [];
+
+    /**
+     * 初始化短信
+     * @throws InvalidConfigException
+     */
+    public function init()
+    {
+        parent::init();
+        if (empty ($this->baseUrl)) {
+            throw new InvalidConfigException ('The "baseUrl" property must be set.');
+        }
+        if (empty ($this->signName)) {
+            throw new InvalidConfigException ('The "signName" property must be set.');
+        }
+    }
+
+    /**
+     * Sends HTTP request.
+     * @param string $method request type.
+     * @param string|array $url use a string to represent a URL (e.g. `http://some-domain.com`, `item/list`),
+     * or an array to represent a URL with query parameters (e.g. `['item/list', 'param1' => 'value1']`).
+     * @param string|array $params request params.
+     * @param array $headers additional request headers.
+     * @return array response.
+     * @throws Exception on failure.
+     */
+    protected function sendRequest($method, $url, $params = [], array $headers = [])
+    {
+        $request = $this->getHttpClient()
+            ->createRequest()
+            ->addOptions($this->defaultRequestOptions())
+            ->addOptions($this->getRequestOptions())
+            ->setUrl($url)
+            ->setMethod($method)
+            ->setHeaders($headers);
+        if (is_array($params)) {
+            $request->setData($params);
+        } else {
+            $request->setContent($params);
+        }
+        $response = $request->send();
+        if (!$response->isOk) {
+            throw new Exception('Request fail. response: ' . $response->content, $response->statusCode);
+        }
+        return $response->data;
+    }
+
+    /**
+     * Returns HTTP client.
+     * @return Client internal HTTP client.
+     */
+    public function getHttpClient()
+    {
+        if (!is_object($this->_httpClient)) {
+            $this->_httpClient = new Client([
+                'baseUrl' => $this->baseUrl,
+                'responseConfig' => [
+                    'format' => Client::FORMAT_JSON
+                ],
+            ]);
+        }
+        return $this->_httpClient;
+    }
+
+    /**
+     * Sets HTTP client to be used.
+     * @param array|Client $httpClient internal HTTP client.
+     */
+    public function setHttpClient($httpClient)
+    {
+        $this->_httpClient = $httpClient;
+    }
+
+    /**
+     * 设置Http请求参数
+     * @param array $options HTTP request options.
+     */
+    public function setRequestOptions(array $options)
+    {
+        $this->_requestOptions = $options;
+    }
+
+    /**
+     * 获取Http请求参数
+     * @return array HTTP request options.
+     */
+    public function getRequestOptions()
+    {
+        return $this->_requestOptions;
+    }
+
+    /**
+     * Returns default HTTP request options.
+     * @return array HTTP request options.
+     */
+    protected function defaultRequestOptions()
+    {
+        return [
+            'timeout' => 30,
+            'sslVerifyPeer' => false,
+        ];
+    }
 
     /**
      * 发送短信
