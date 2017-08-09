@@ -7,13 +7,13 @@
 
 namespace xutl\sms\clients;
 
-use xutl\sms\BaseSms;
+use xutl\sms\Sms;
 
 /**
  * Class Emay
  * @package xutl\sms\clients
  */
-class Emay extends BaseSms
+class Emay extends Sms
 {
 
 }

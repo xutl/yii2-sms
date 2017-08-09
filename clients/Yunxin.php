@@ -7,9 +7,9 @@
 
 namespace xutl\sms\clients;
 
-use xutl\sms\BaseSms;
+use xutl\sms\Sms;
 
-class Yunxin extends BaseSms
+class Yunxin extends Sms
 {
 
 }

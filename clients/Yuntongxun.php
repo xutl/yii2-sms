@@ -7,7 +7,7 @@
 
 namespace yuncms\sms\clients;
 
-use xutl\sms\BaseSms;
+use xutl\sms\Sms;
 use Yii;
 use yii\base\InvalidConfigException;
 
@@ -27,7 +27,7 @@ use yii\base\InvalidConfigException;
  * ```
  * @package yuncms\sms\clients
  */
-class Yuntongxun extends BaseSms
+class Yuntongxun extends Sms
 {
     /**
      * @var string 基础请求URL

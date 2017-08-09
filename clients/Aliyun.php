@@ -7,12 +7,12 @@
 
 namespace xutl\sms\clients;
 
-
 use yii\helpers\Json;
 use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\InvalidConfigException;
-use xutl\sms\BaseSms;
+use yii\base\NotSupportedException;
+use xutl\sms\Sms;
 
 /**
  * 阿里云短消息接口
@@ -30,7 +30,7 @@ use xutl\sms\BaseSms;
  * ```
  * @package xutl\sms\clients
  */
-class Aliyun extends BaseSms
+class Aliyun extends Sms
 {
     /**
      * @var string 阿里云AccessKey ID
@@ -90,15 +90,15 @@ class Aliyun extends BaseSms
 
     /**
      * 发送短信
-     * @param string $phoneNumbers
+     * @param array|string $phoneNumbers
      * @param string $content
-     * @param null $signName
-     * @param null $outId
-     * @return array
+     * @param string $signName
+     * @param string $outId
+     * @throws NotSupportedException
      */
-    protected function sendSms($phoneNumbers, $content, $signName = null, $outId = null)
+    protected function sendMessage($phoneNumbers, $content, $signName = null, $outId = null)
     {
-        return [];
+        throw new NotSupportedException('Method "' . __CLASS__ . '::' . __METHOD__ . '" is not implemented.');
     }
 
     /**
@@ -110,7 +110,7 @@ class Aliyun extends BaseSms
      * @param string $outId
      * @return mixed
      */
-    protected function sendTemplateSms($phoneNumbers, $templateCode, array $templateParam = [], $signName = null, $outId = null)
+    protected function sendTemplateMessage($phoneNumbers, $templateCode, array $templateParam = [], $signName = null, $outId = null)
     {
         return $this->api('', 'GET', [
             'Action' => 'SendSms',
