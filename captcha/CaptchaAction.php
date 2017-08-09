@@ -12,6 +12,7 @@ use yii\base\Action;
 use yii\di\Instance;
 use yii\helpers\Url;
 use yii\web\Response;
+use xutl\sms\Sms;
 
 /**
  * CaptchaAction renders a CAPTCHA image.
@@ -68,8 +69,10 @@ class CaptchaAction extends Action
      */
     public $fixedVerifyCode;
 
+    public $smsTemplateCode = 'SMS_82545002';
+
     /**
-     * @var string
+     * @var string|Sms
      */
     public $sms = 'sms';
 
@@ -79,7 +82,7 @@ class CaptchaAction extends Action
     public function init()
     {
         parent::init();
-        //$this->sms = Instance::ensure($this->sms, Sms::class);
+        $this->sms = Instance::ensure($this->sms, Sms::class);
     }
 
     /**
@@ -94,25 +97,21 @@ class CaptchaAction extends Action
             $name = $this->getSessionKey();
             if (time() - $session[$name . 'time'] < 60) {
                 $code = $this->getVerifyCode(false);
-                return [
-                    //'code' => $code,
-                    'hash' => $this->generateValidationHash($code),
-                    'url' => Url::to([$this->id, 'v' => uniqid()]),
-                    'waitTime' => $this->waitTime,
-                    'mobile' => $mobile,
-                ];
             } else {
                 $code = $this->getVerifyCode(true);
                 $session['newMobile'] = $mobile;
-                //$this->sms->sendVerifyCode($mobile, $code);
-                return [
-                    //'code' => $code,
-                    'hash' => $this->generateValidationHash($code),
-                    'url' => Url::to([$this->id, 'v' => uniqid()]),
-                    'waitTime' => $this->waitTime,
-                    'mobile' => $mobile,
-                ];
+                $this->sms->sendTemplate($mobile, $this->smsTemplateCode, ['code' => $code]);
             }
+            $return = [
+                'hash' => $this->generateValidationHash($code),
+                'url' => Url::to([$this->id, 'v' => uniqid()]),
+                'waitTime' => $this->waitTime,
+                'mobile' => $mobile,
+            ];
+            if (YII_DEBUG) {
+                $return['code'] = $code;
+            }
+            return $return;
         }
     }
 
@@ -201,7 +200,7 @@ class CaptchaAction extends Action
         }
         $length = mt_rand($this->minLength, $this->maxLength);
 
-        $letters = '67890678906789067890';
+        $letters = '6789067890678906789067890';
         $vowels = '12345';
         $code = '';
         for ($i = 0; $i < $length; ++$i) {
