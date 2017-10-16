@@ -19,7 +19,7 @@ use xutl\sms\BaseClient;
  * 'components' => [
  *     'sms' => [
  *         'class' => 'xutl\sms\clients\Yuntongxun',
- *         'accountSid' => 'account_sid',
+ *         'accountId' => 'account_sid',
  *         'accountToken' => 'account_token',
  *         'appId' => 'app_id',
  *     ]
@@ -149,10 +149,9 @@ class Yuntongxun extends BaseClient
      */
     public function sendTemplateMessage($phoneNumbers, $template, array $templateParams = [], $signName = null, $outId = null)
     {
-        $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $template, 'datas' => $templateParams];
+        $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $template, 'datas' => array_values($templateParams)];
         return $this->api("Accounts/$this->accountId/SMS/TemplateSMS", 'POST', $params);
     }
-
 
     /**
      * 语音验证码

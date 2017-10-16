@@ -4,10 +4,12 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
+
 namespace xutl\sms;
 
 use Yii;
 use yii\base\Component;
+use yii\base\InvalidParamException;
 use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\InvalidConfigException;
@@ -18,6 +20,8 @@ use yii\base\InvalidConfigException;
  */
 abstract class BaseClient extends Component
 {
+    const TEMPLATE_TEST = 'test';
+
     /**
      * @var string 网关地址
      */
@@ -26,7 +30,15 @@ abstract class BaseClient extends Component
     /**
      * @var array 短信模板配置
      */
-    public $templates = [];
+    public $templates = [
+        '身份验证验证码' => '',
+        '登录确认验证码' => '',
+        '登录异常验证码' => '',
+        '用户注册验证码' => '',
+        '修改密码验证码' => '',
+        '信息变更验证码' => '',
+        self::TEMPLATE_TEST => ''
+    ];
 
     /**
      * @var Client internal HTTP client.
@@ -127,6 +139,19 @@ abstract class BaseClient extends Component
     }
 
     /**
+     * 获取短信验证码模板
+     * @param string $template
+     * @return mixed
+     */
+    public function getTemplate($template)
+    {
+        if (isset($this->templates[$template])) {
+            return $this->templates[$template];
+        }
+        throw new InvalidParamException("Unknown template '{$template}'.");
+    }
+
+    /**
      * Returns default HTTP request options.
      * @return array HTTP request options.
      */
@@ -170,9 +195,17 @@ abstract class BaseClient extends Component
         if (is_array($phoneNumbers)) {
             $phoneNumbers = implode(', ', $phoneNumbers);
         }
-        Yii::info('Sending template sms "' . $templateCode . '" to "' . $phoneNumbers . '"', __METHOD__);
+        $params = $this->getTemplate($templateCode);
+        $templateCode = $params[0];
+        unset($params[0]);
 
-        return $this->sendTemplateMessage($phoneNumbers, $templateCode, $templateParam, $signName, $outId);
+        foreach ($params as $name => $rule) {
+            if (isset($templateParam[$name])) {
+                $params[$name] = $templateParam[$name];
+            }
+        }
+        Yii::info('Sending template sms "' . $templateCode . '" to "' . $phoneNumbers . '"', __METHOD__);
+        return $this->sendTemplateMessage($phoneNumbers, $templateCode, $params, $signName, $outId);
     }
 
     /**
@@ -180,7 +213,7 @@ abstract class BaseClient extends Component
      * @param string|array $phoneNumbers 手机号
      * @param string $content 内容
      * @param string $signName 签名
-     * @param string $outId
+     * @param string $outId 外部流水扩展字段
      * @return mixed
      */
     abstract protected function sendMessage($phoneNumbers, $content, $signName = null, $outId = null);
@@ -191,7 +224,7 @@ abstract class BaseClient extends Component
      * @param string $template 模板
      * @param array $templateParam 模板参数
      * @param string $signName 签名
-     * @param string $outId
+     * @param string $outId 外部流水扩展字段
      * @return mixed
      */
     abstract protected function sendTemplateMessage($phoneNumbers, $template, array $templateParam = [], $signName = null, $outId = null);

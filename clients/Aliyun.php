@@ -54,7 +54,7 @@ class Aliyun extends BaseClient
      * @var string Api接口版本
      */
     public $version = '2017-05-25';
-
+    
     /**
      * @var string
      */
@@ -104,11 +104,11 @@ class Aliyun extends BaseClient
 
     /**
      * 发送模板短信
-     * @param string $phoneNumbers
-     * @param string $template
-     * @param array $templateParam
-     * @param string $signName
-     * @param string $outId
+     * @param string $phoneNumbers 手机号
+     * @param string $template 模板名称
+     * @param array $templateParam 模板参数
+     * @param string $signName 签名
+     * @param string $outId 外部流水扩展字段
      * @return mixed
      */
     protected function sendTemplateMessage($phoneNumbers, $template, array $templateParam = [], $signName = null, $outId = null)
