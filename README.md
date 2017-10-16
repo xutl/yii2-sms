@@ -37,18 +37,17 @@ Add following lines to your main configuration file:
 ```php
 'modules' => [
     'sms' => [
-        'class' => 'xutl\sms\clients\Aliyun'   
+        'class' => 'xutl\sms\clients\Aliyun',
+        'templates' => [
+            //etc
+        ]   
     ],
 ],
 ```
 
-### Step 3: Updating database schema
+### Step 3: Configuring your sms template
 
-After you downloaded and configured Yii2-admin, the last thing you need to do is updating your database schema by applying the migrations:
 
-```bash
-$ php yii migrate/up 
-```
 
 ## License
 

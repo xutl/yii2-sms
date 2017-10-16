@@ -54,7 +54,7 @@ class Aliyun extends BaseClient
      * @var string Api接口版本
      */
     public $version = '2017-05-25';
-    
+
     /**
      * @var string
      */
