@@ -37,7 +37,7 @@ Add following lines to your main configuration file:
 ```php
 'modules' => [
     'sms' => [
-        'class' => 'xutl\sms\client\Aliyun'   
+        'class' => 'xutl\sms\clients\Aliyun'   
     ],
 ],
 ```
