@@ -8,11 +8,11 @@
 namespace xutl\sms\clients;
 
 use Yii;
+use yii\httpclient\Client;
+use yii\httpclient\Exception;
 use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
 use xutl\sms\Sms;
-use yii\httpclient\Client;
-use yii\httpclient\Exception;
 
 /**
  * Class Yuntongxun
@@ -145,6 +145,8 @@ class Yuntongxun extends Sms
      * @param array|string $phoneNumbers 短信接收手机号码集合,用英文逗号分开
      * @param array $templateParams 内容数据
      * @param string $templateCode 模板Id
+     * @param string $signName
+     * @param string $outId
      * @return array
      */
     public function sendTemplateMessage($phoneNumbers, $templateCode, array $templateParams = [], $signName = null, $outId = null)
@@ -189,7 +191,7 @@ class Yuntongxun extends Sms
     public function QuerySMSTemplate($templateId)
     {
         $params = ['appId' => $this->appId, 'templateId' => $templateId];
-        return $this->api("Accounts/$this->accountSid/SMS/QuerySMSTemplate", 'POST', $params);
+        return $this->api("Accounts/{$this->accountId}/SMS/QuerySMSTemplate", 'POST', $params);
     }
 
     /**
