@@ -149,7 +149,7 @@ class Yuntongxun extends BaseClient
      */
     public function sendTemplateMessage($phoneNumbers, $template, array $templateParams = [], $signName = null, $outId = null)
     {
-        $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $template, 'datas' => array_values($templateParams)];
+        $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $template, 'datas' => $templateParams];
         return $this->api("Accounts/$this->accountId/SMS/TemplateSMS", 'POST', $params);
     }
 
