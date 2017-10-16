@@ -16,7 +16,7 @@ use yii\base\InvalidConfigException;
  * Class BaseSms
  * @package xutl\sms
  */
-abstract class BaseSms extends Component
+abstract class BaseClient extends Component
 {
     /**
      * @var string 网关地址

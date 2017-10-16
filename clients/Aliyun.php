@@ -12,25 +12,23 @@ use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
-use xutl\sms\Sms;
+use xutl\sms\BaseClient;
 
 /**
  * 阿里云短消息接口
  *
  * 'components' => [
  *     'sms' => [
- *         'aliyun' => [
- *             'class' => 'xutl\aliyun\clients\Aliyun',
- *             'accessId' => 'access_id',
- *             'accessKey' => 'access_key',
- *          ],
+ *         'class' => 'xutl\aliyun\clients\Aliyun',
+ *         'accessId' => 'access_id',
+ *         'accessKey' => 'access_key',
  *     ]
  *     ...
  * ]
  * ```
  * @package xutl\sms\clients
  */
-class Aliyun extends Sms
+class Aliyun extends BaseClient
 {
     /**
      * @var string 阿里云AccessKey ID

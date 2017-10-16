@@ -12,25 +12,23 @@ use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\NotSupportedException;
 use yii\base\InvalidConfigException;
-use xutl\sms\Sms;
+use xutl\sms\BaseClient;
 
 /**
  * Class Yuntongxun
  * 'components' => [
  *     'sms' => [
- *         'aliyun' => [
- *             'class' => 'xutl\aliyun\clients\Yuntongxun',
- *             'accountSid' => 'account_sid',
- *             'accountToken' => 'account_token',
- *             'appId' => 'app_id',
- *          ],
+ *         'class' => 'xutl\aliyun\clients\Yuntongxun',
+ *         'accountSid' => 'account_sid',
+ *         'accountToken' => 'account_token',
+ *         'appId' => 'app_id',
  *     ]
  *     ...
  * ]
  * ```
  * @package yuncms\sms\clients
  */
-class Yuntongxun extends Sms
+class Yuntongxun extends BaseClient
 {
     /**
      * @var string 基础请求URL
