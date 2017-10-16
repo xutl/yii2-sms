@@ -18,7 +18,7 @@ use xutl\sms\BaseClient;
  * Class Yuntongxun
  * 'components' => [
  *     'sms' => [
- *         'class' => 'xutl\aliyun\clients\Yuntongxun',
+ *         'class' => 'xutl\sms\clients\Yuntongxun',
  *         'accountSid' => 'account_sid',
  *         'accountToken' => 'account_token',
  *         'appId' => 'app_id',
@@ -142,14 +142,14 @@ class Yuntongxun extends BaseClient
      * 发送模板短信
      * @param array|string $phoneNumbers 短信接收手机号码集合,用英文逗号分开
      * @param array $templateParams 内容数据
-     * @param string $templateCode 模板Id
+     * @param string $template 模板Id
      * @param string $signName
      * @param string $outId
      * @return array
      */
-    public function sendTemplateMessage($phoneNumbers, $templateCode, array $templateParams = [], $signName = null, $outId = null)
+    public function sendTemplateMessage($phoneNumbers, $template, array $templateParams = [], $signName = null, $outId = null)
     {
-        $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $templateCode, 'datas' => $templateParams];
+        $params = ['appId' => $this->appId, 'to' => $phoneNumbers, 'templateId' => $template, 'datas' => $templateParams];
         return $this->api("Accounts/$this->accountId/SMS/TemplateSMS", 'POST', $params);
     }
 

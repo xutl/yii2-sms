@@ -19,7 +19,7 @@ use xutl\sms\BaseClient;
  *
  * 'components' => [
  *     'sms' => [
- *         'class' => 'xutl\aliyun\clients\Aliyun',
+ *         'class' => 'xutl\sms\clients\Aliyun',
  *         'accessId' => 'access_id',
  *         'accessKey' => 'access_key',
  *     ]
@@ -105,19 +105,19 @@ class Aliyun extends BaseClient
     /**
      * 发送模板短信
      * @param string $phoneNumbers
-     * @param string $templateCode
+     * @param string $template
      * @param array $templateParam
      * @param string $signName
      * @param string $outId
      * @return mixed
      */
-    protected function sendTemplateMessage($phoneNumbers, $templateCode, array $templateParam = [], $signName = null, $outId = null)
+    protected function sendTemplateMessage($phoneNumbers, $template, array $templateParam = [], $signName = null, $outId = null)
     {
         return $this->api('', 'GET', [
             'Action' => 'SendSms',
             'PhoneNumbers' => $phoneNumbers,
             'SignName' => $signName ? $signName : $this->signName,
-            'TemplateCode' => $templateCode,
+            'TemplateCode' => $template,
             'TemplateParam' => Json::encode($templateParam),
             'OutId' => $outId
         ]);
