@@ -213,7 +213,7 @@ class Yuntongxun extends BaseClient
         if ($response['statusCode'] == '000000') {
             return $response['TemplateSMS'];
         } else {
-            throw new Exception('Request fail. response: ' . $response['statusMsg'], $response['statusCode']);
+            throw new Exception($response['statusMsg'], $response['statusCode']);
         }
     }
 

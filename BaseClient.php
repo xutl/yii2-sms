@@ -20,25 +20,13 @@ use yii\base\InvalidConfigException;
  */
 abstract class BaseClient extends Component
 {
-    const TEMPLATE_TEST = 'test';
+    const TEMPLATE_TEST = 'Test';
+    const TEMPLATE_VERIFY_CODE = 'VerifyCode';
 
     /**
      * @var string 网关地址
      */
     public $baseUrl;
-
-    /**
-     * @var array 短信模板配置
-     */
-    public $templates = [
-        '身份验证验证码' => '',
-        '登录确认验证码' => '',
-        '登录异常验证码' => '',
-        '用户注册验证码' => '',
-        '修改密码验证码' => '',
-        '信息变更验证码' => '',
-        self::TEMPLATE_TEST => ''
-    ];
 
     /**
      * @var Client internal HTTP client.
@@ -139,19 +127,6 @@ abstract class BaseClient extends Component
     }
 
     /**
-     * 获取短信验证码模板
-     * @param string $template
-     * @return mixed
-     */
-    public function getTemplate($template)
-    {
-        if (isset($this->templates[$template])) {
-            return $this->templates[$template];
-        }
-        throw new InvalidParamException("Unknown template '{$template}'.");
-    }
-
-    /**
      * Returns default HTTP request options.
      * @return array HTTP request options.
      */
@@ -195,17 +170,8 @@ abstract class BaseClient extends Component
         if (is_array($phoneNumbers)) {
             $phoneNumbers = implode(', ', $phoneNumbers);
         }
-        $params = $this->getTemplate($templateCode);
-        $templateCode = $params[0];
-        unset($params[0]);
-
-        foreach ($params as $name => $rule) {
-            if (isset($templateParam[$name])) {
-                $params[$name] = $templateParam[$name];
-            }
-        }
         Yii::info('Sending template sms "' . $templateCode . '" to "' . $phoneNumbers . '"', __METHOD__);
-        return $this->sendTemplateMessage($phoneNumbers, $templateCode, $params, $signName, $outId);
+        return $this->sendTemplateMessage($phoneNumbers, $templateCode, $templateParam, $signName, $outId);
     }
 
     /**
