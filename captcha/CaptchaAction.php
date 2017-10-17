@@ -15,6 +15,7 @@ use yii\di\Instance;
 use yii\helpers\Url;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\Response;
+use yii\web\TooManyRequestsHttpException;
 
 /**
  * CaptchaAction send a sms message.
@@ -107,6 +108,11 @@ class CaptchaAction extends Action
                     'mobile' => $mobile,
                 ];
             } else {
+                if ($mobileCount = $this->cache->get($this->sessionKey . $mobile) > 9) {
+                    throw new TooManyRequestsHttpException('Too Many Requests.');
+                }
+                $this->cache->set($this->sessionKey . $mobile, $mobileCount + 1, $this->duration);
+
                 $code = $this->getVerifyCode(true);
                 $this->cache->set($this->sessionKey . 'mobile', $mobile, $this->duration);
                 Yii::$app->queue->push(new $this->sendJobClass([
