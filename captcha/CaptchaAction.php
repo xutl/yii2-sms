@@ -30,6 +30,11 @@ class CaptchaAction extends Action
     public $waitTime = 60;
 
     /**
+     * @var int 滚动计算有效期
+     */
+    public $duration = 86400;
+
+    /**
      * @var int 测试验证码次数
      */
     public $testLimit = 3;
@@ -79,45 +84,44 @@ class CaptchaAction extends Action
     public function init()
     {
         parent::init();
+        $this->sessionKey = $this->getSessionKey();
         $this->cache = Instance::ensure($this->cache, Cache::className());
     }
 
     /**
      * Runs the action.
+     * @return array
+     * @throws MethodNotAllowedHttpException
      */
     public function run()
     {
-        if (!Yii::$app->request->isPost) {
-            throw new MethodNotAllowedHttpException();
-        }
-        if (($this->mobile = Yii::$app->request->post('mobile')) == null) {
-            throw new MethodNotAllowedHttpException();
-        }
-        $this->sessionKey = $this->getSessionKey($this->mobile);
-
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if (time() - $this->cache->get($this->sessionKey . 'time') < 60) {
-            $code = $this->getVerifyCode(false);
-            return [
-                'hash' => $this->generateValidationHash($code),
-                'url' => Url::to([$this->id, 'v' => uniqid()]),
-                'waitTime' => $this->waitTime,
-                'mobile' => $this->mobile,
-            ];
-        } else {
-            $code = $this->getVerifyCode(true);
-            $this->cache->set($this->sessionKey . 'mobile', $this->mobile);
-            Yii::$app->queue->push(new $this->sendJobClass([
-                'mobile' => $this->mobile,
-                'code' => $code,
-            ]));
-            return [
-                'hash' => $this->generateValidationHash($code),
-                'url' => Url::to([$this->id, 'v' => uniqid()]),
-                'waitTime' => $this->waitTime,
-                'mobile' => $this->mobile,
-            ];
+        if (Yii::$app->request->isPost && ($mobile = Yii::$app->request->post('mobile')) != null) {
+            //两次获取间隔小于60
+            if (time() - $this->cache->get($this->sessionKey . 'time') < $this->waitTime) {
+                $code = $this->getVerifyCode(false);
+                return [
+                    'hash' => $this->generateValidationHash($code),
+                    'url' => Url::to([$this->id, 'v' => uniqid()]),
+                    'waitTime' => $this->waitTime,
+                    'mobile' => $mobile,
+                ];
+            } else {
+                $code = $this->getVerifyCode(true);
+                $this->cache->set($this->sessionKey . 'mobile', $mobile, $this->duration);
+                Yii::$app->queue->push(new $this->sendJobClass([
+                    'mobile' => $mobile,
+                    'code' => $code,
+                ]));
+                return [
+                    'hash' => $this->generateValidationHash($code),
+                    'url' => Url::to([$this->id, 'v' => uniqid()]),
+                    'waitTime' => $this->waitTime,
+                    'mobile' => $mobile,
+                ];
+            }
         }
+        throw new MethodNotAllowedHttpException();
     }
 
     /**
@@ -130,14 +134,18 @@ class CaptchaAction extends Action
         if ($this->fixedVerifyCode !== null) {
             return $this->fixedVerifyCode;
         }
-
         $verifyCode = $this->cache->get($this->sessionKey);
         if ($verifyCode === null || $regenerate) {
             $verifyCode = $this->generateVerifyCode();
-            $this->cache->set($this->sessionKey, $verifyCode, $this->waitTime);
-            $this->cache->set($this->sessionKey . 'mobile', $this->mobile, 86400);
-            $this->cache->set($this->sessionKey . 'count', 1, 86400);
-            $this->cache->set($this->sessionKey . 'time', time(), 86400);
+            Yii::$app->cache->multiSet([
+                $this->sessionKey => $verifyCode,
+                $this->sessionKey . 'time' => time(),
+            ], $this->waitTime);
+
+            Yii::$app->cache->multiSet([
+                $this->sessionKey . 'mobile' => $this->mobile,
+                $this->sessionKey . 'count' => 1,
+            ], $this->duration);
         }
         return $verifyCode;
     }
@@ -158,7 +166,8 @@ class CaptchaAction extends Action
         if ($valid || $count > $this->testLimit && $this->testLimit > 0) {
             $this->getVerifyCode(true);
         }
-        $this->cache->set($this->sessionKey . 'count', $count, 86400);
+        //更新计数器
+        $this->cache->set($this->sessionKey . 'count', $count, $this->duration);
         return $valid;
     }
 
@@ -172,6 +181,16 @@ class CaptchaAction extends Action
         $mobile = $this->cache->get($this->sessionKey . 'mobile');
         $valid = strcasecmp($mobile, $input) === 0;
         return $valid;
+    }
+
+    /**
+     * 返回用于存储验证代码的会话变量名
+     * @param string $mobile 手机号
+     * @return string the session variable name
+     */
+    protected function getSessionKey()
+    {
+        return '__smsCaptcha/' . Yii::$app->request->userIP;
     }
 
     /**
@@ -215,15 +234,5 @@ class CaptchaAction extends Action
             }
         }
         return $code;
-    }
-
-    /**
-     * 返回用于存储验证代码的会话变量名
-     * @param string $mobile 手机号
-     * @return string the session variable name
-     */
-    protected function getSessionKey($mobile)
-    {
-        return '__smsCaptcha/' . $mobile;
     }
 }

@@ -41,7 +41,7 @@
             cookieString = cookieString + ";expires=" + date.toUTCString();
         }
         document.cookie = cookieString;
-    }
+    };
 
     var editCookie = function (name, value, expiresHours) {
         var cookieString = name + "=" + value;
@@ -51,7 +51,7 @@
             cookieString = cookieString + ";expires=" + date.toGMTString();
         }
         document.cookie = cookieString;
-    }
+    };
 
     var getCookie = function (name) {
         var strCookie = document.cookie;
@@ -63,7 +63,7 @@
                 break;
             }
         }
-    }
+    };
 
     var methods = {
         init: function (options) {
@@ -149,7 +149,7 @@ yii.validation.smsCaptcha = function (value, messages, options) {
     }
 
     // CAPTCHA may be updated via AJAX and the updated hash is stored in body data
-    var hash = $('body').data(options.hashKey);
+    var hash = jQuery('body').data(options.hashKey);
     if (hash == null) {
         hash = options.hash;
     }
