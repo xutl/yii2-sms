@@ -22,6 +22,8 @@ class CaptchaJob extends Object implements RetryableJob
      */
     public $mobile;
 
+    public $templateCode;
+
     /**
      * @var string
      */
@@ -50,7 +52,7 @@ class CaptchaJob extends Object implements RetryableJob
      */
     public function getTemplateParam()
     {
-        return $this->templateParam;
+        return [];
     }
 
     /**
