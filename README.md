@@ -38,15 +38,14 @@ Add following lines to your main configuration file:
 'modules' => [
     'sms' => [
         'class' => 'xutl\sms\clients\Aliyun',
-        'templates' => [
-            //etc
-        ]   
+        //etc 
     ],
 ],
 ```
 
 ### Step 3: Configuring your sms template
 
+继承 `xutl\sms\SendJob` 实现你的短信发送个，在SendJob子类中设定模板什么的。发送直接推给队列了。由队列负责发送。
 
 
 ## License
