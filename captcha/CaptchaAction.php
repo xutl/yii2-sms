@@ -90,9 +90,10 @@ class CaptchaAction extends Action
     }
 
     /**
-     * Runs the action.
+     * @inheritdoc
      * @return array
      * @throws MethodNotAllowedHttpException
+     * @throws TooManyRequestsHttpException
      */
     public function run()
     {
@@ -191,7 +192,6 @@ class CaptchaAction extends Action
 
     /**
      * 返回用于存储验证代码的会话变量名
-     * @param string $mobile 手机号
      * @return string the session variable name
      */
     protected function getSessionKey()
