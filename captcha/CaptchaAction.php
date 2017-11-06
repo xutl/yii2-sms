@@ -60,7 +60,7 @@ class CaptchaAction extends Action
     public $fixedVerifyCode;
 
     /**
-     * @var string 短信发送任务
+     * @var string 短信发送类
      */
     public $sendJobClass = 'xutl\sms\CaptchaJob';
 

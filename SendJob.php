@@ -8,14 +8,15 @@
 namespace xutl\sms;
 
 use Yii;
-use yii\base\Object;
-use yii\queue\RetryableJob;
+use yii\base\BaseObject;
+use yii\di\Instance;
+use yii\queue\RetryableJobInterface;
 
 /**
- * Class SendJob
+ * 发送短信
  * @package xutl\sms
  */
-class SendJob extends Object implements RetryableJob
+class SendJob extends BaseObject implements RetryableJobInterface
 {
     /**
      * @var string Mobile number
@@ -33,11 +34,25 @@ class SendJob extends Object implements RetryableJob
     public $templateParam;
 
     /**
+     * @var \xutl\sms\BaseClient
+     */
+    public $sms = 'sms';
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->sms = Instance::ensure($this->sms, 'xutl\sms\BaseClient');
+    }
+
+    /**
      * @inheritdoc
      */
     public function execute($queue)
     {
-        Yii::$app->sms->sendTemplate($this->mobile, $this->getTemplateCode(), $this->getTemplateParam());
+        $this->sms->sendTemplate($this->mobile, $this->getTemplateCode(), $this->getTemplateParam());
     }
 
     /**
