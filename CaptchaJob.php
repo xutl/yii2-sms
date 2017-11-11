@@ -9,26 +9,43 @@ namespace xutl\sms;
 
 use Yii;
 use yii\base\BaseObject;
-use yii\queue\RetryableJobInterface;
-
+use yii\di\Instance;
+use yii\queue\RetryableJob;
 
 /**
  * 发送短信验证码
  * @package xutl\sms
  */
-class CaptchaJob extends BaseObject implements RetryableJobInterface
+class CaptchaJob extends BaseObject implements RetryableJob
 {
     /**
      * @var string Mobile number
      */
     public $mobile;
 
+    /**
+     * @var string 短信模板代码
+     */
     public $templateCode;
 
     /**
-     * @var string
+     * @var string 验证码
      */
     public $code;
+
+    /**
+     * @var \xutl\sms\BaseClient
+     */
+    public $sms = 'sms';
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->sms = Instance::ensure($this->sms, 'xutl\sms\BaseClient');
+    }
 
     /**
      * @inheritdoc

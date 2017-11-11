@@ -9,7 +9,6 @@ namespace xutl\sms;
 
 use Yii;
 use yii\base\Component;
-use yii\base\InvalidParamException;
 use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\InvalidConfigException;

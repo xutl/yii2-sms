@@ -8,7 +8,6 @@
 namespace xutl\sms\clients;
 
 use yii\helpers\Json;
-use yii\httpclient\Client;
 use yii\httpclient\Exception;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;

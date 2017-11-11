@@ -7,16 +7,15 @@
 
 namespace xutl\sms;
 
-use Yii;
 use yii\base\BaseObject;
 use yii\di\Instance;
-use yii\queue\RetryableJobInterface;
+use yii\queue\RetryableJob;
 
 /**
  * 发送短信
  * @package xutl\sms
  */
-class SendJob extends BaseObject implements RetryableJobInterface
+class SendJob extends BaseObject implements RetryableJob
 {
     /**
      * @var string Mobile number

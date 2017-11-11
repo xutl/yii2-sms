@@ -7,7 +7,6 @@
 
 namespace xutl\sms\captcha;
 
-use xutl\sms\SendJob;
 use Yii;
 use yii\base\Action;
 use yii\caching\Cache;
