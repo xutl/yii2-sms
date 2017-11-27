@@ -138,6 +138,43 @@ abstract class BaseClient extends Component
     }
 
     /**
+     * 发送国际短信
+     * @param string $nationCode 国家代码
+     * @param string|array $phoneNumbers 接收者手机号
+     * @param string $content 短信内容
+     * @param string $signName 签名
+     * @param string $outId
+     * @return bool
+     */
+    public function sendInternational($nationCode, $phoneNumbers, $content, $signName = null, $outId = null)
+    {
+        if (is_array($phoneNumbers)) {
+            $phoneNumbers = implode(', ', $phoneNumbers);
+        }
+        Yii::info('Sending sms "' . $content . '" to "' . $phoneNumbers . '"', __METHOD__);
+        return $this->sendInternationalMessage($nationCode, $phoneNumbers, $content, $signName, $outId);
+    }
+
+    /**
+     * 发送国际模板短信
+     * @param string $nationCode 国家代码
+     * @param string|array $phoneNumbers
+     * @param string $templateCode
+     * @param array $templateParam
+     * @param string $signName
+     * @param string $outId
+     * @return bool
+     */
+    public function sendInternationalTemplate($nationCode, $phoneNumbers, $templateCode, array $templateParam = [], $signName = null, $outId = null)
+    {
+        if (is_array($phoneNumbers)) {
+            $phoneNumbers = implode(', ', $phoneNumbers);
+        }
+        Yii::info('Sending template sms "' . $templateCode . '" to "' . $phoneNumbers . '"', __METHOD__);
+        return $this->sendInternationalTemplateMessage($nationCode, $phoneNumbers, $templateCode, $templateParam, $signName, $outId);
+    }
+
+    /**
      * 发送短信
      * @param string|array $phoneNumbers 接收者手机号
      * @param string $content 短信内容
@@ -193,4 +230,27 @@ abstract class BaseClient extends Component
      * @return mixed
      */
     abstract protected function sendTemplateMessage($phoneNumbers, $template, array $templateParam = [], $signName = null, $outId = null);
+
+    /**
+     * 发送模板短信
+     * @param string $nationCode 国家代码
+     * @param string|array $phoneNumbers 手机号
+     * @param string $content 内容
+     * @param string $signName 签名
+     * @param string $outId 外部流水扩展字段
+     * @return mixed
+     */
+    abstract protected function sendInternationalMessage($nationCode, $phoneNumbers, $content, $signName = null, $outId = null);
+
+    /**
+     * 发送模板短信
+     * @param string $nationCode 国家代码
+     * @param string|array $phoneNumbers 手机号
+     * @param string $template 模板
+     * @param array $templateParam 模板参数
+     * @param string $signName 签名
+     * @param string $outId 外部流水扩展字段
+     * @return mixed
+     */
+    abstract protected function sendInternationalTemplateMessage($nationCode, $phoneNumbers, $template, array $templateParam = [], $signName = null, $outId = null);
 }

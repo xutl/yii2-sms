@@ -187,4 +187,33 @@ class Aliyun extends BaseClient
         $res = preg_replace('/%7E/', '~', $res);
         return $res;
     }
+
+    /**
+     * 发送模板短信
+     * @param string $nationCode 国家代码
+     * @param string|array $phoneNumbers 手机号
+     * @param string $content 内容
+     * @param string $signName 签名
+     * @param string $outId 外部流水扩展字段
+     * @return mixed
+     */
+    protected function sendInternationalMessage($nationCode, $phoneNumbers, $content, $signName = null, $outId = null)
+    {
+        // TODO: Implement sendInternationalMessage() method.
+    }
+
+    /**
+     * 发送模板短信
+     * @param string $nationCode 国家代码
+     * @param string|array $phoneNumbers 手机号
+     * @param string $template 模板
+     * @param array $templateParam 模板参数
+     * @param string $signName 签名
+     * @param string $outId 外部流水扩展字段
+     * @return mixed
+     */
+    protected function sendInternationalTemplateMessage($nationCode, $phoneNumbers, $template, array $templateParam = [], $signName = null, $outId = null)
+    {
+        // TODO: Implement sendInternationalTemplateMessage() method.
+    }
 }
