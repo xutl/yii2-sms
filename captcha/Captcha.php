@@ -99,6 +99,7 @@ class Captcha extends InputWidget
 
     /**
      * Initializes the widget.
+     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {

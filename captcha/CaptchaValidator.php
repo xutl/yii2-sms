@@ -64,7 +64,7 @@ class CaptchaValidator extends Validator
 
     /**
      * Creates the CAPTCHA action object from the route specified by [[captchaAction]].
-     * @return \xutl\sms\captcha\CaptchaAction the action object
+     * @return CaptchaAction|\yii\base\Action
      * @throws InvalidConfigException
      */
     public function createCaptchaAction()

@@ -80,6 +80,7 @@ class CaptchaAction extends Action
 
     /**
      * 初始化组件
+     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
