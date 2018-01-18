@@ -17,7 +17,8 @@
   ],
   "require": {
     "yiisoft/yii2-queue": "~2.0.0",
-    "yiisoft/yii2-httpclient": "~2.0.5"
+    "yiisoft/yii2-httpclient": "~2.0.5",
+    "xutl/yii2-aliyun": "~2.0.0"
   },
   "autoload": {
     "psr-4": {
